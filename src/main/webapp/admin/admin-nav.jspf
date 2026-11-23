@@ -1,0 +1,58 @@
+<%@ page import="java.util.Map,java.util.LinkedHashMap,java.sql.SQLException,com.erp.dao.AppSettingsDAO,com.erp.util.HtmlUtil" %>
+<% Map<String,String> branding = new LinkedHashMap<>(); branding.put("site_name","EduERP"); branding.put("logo_url",""); branding.put("favicon_url","");
+   try { branding.putAll(new AppSettingsDAO().getSettings()); } catch (Exception | LinkageError brandingError) { application.log("Website branding settings could not be loaded; using defaults", brandingError); }
+   String siteName = branding.get("site_name"); if (siteName == null || siteName.trim().isEmpty()) siteName = "EduERP"; else siteName = siteName.trim();
+   String logoUrl = branding.get("logo_url"), faviconUrl = branding.get("favicon_url");
+   String logoSrc = logoUrl != null && logoUrl.startsWith("/") ? request.getContextPath() + logoUrl : logoUrl;
+   String faviconSrc = faviconUrl != null && faviconUrl.startsWith("/") ? request.getContextPath() + faviconUrl : faviconUrl;
+   String adminRequestPath = request.getRequestURI();
+   String adminSection = (String) request.getAttribute("activeAdminSection");
+   if (adminSection == null) {
+       if (adminRequestPath.endsWith("/students") || adminRequestPath.endsWith("/students.jsp") || adminRequestPath.endsWith("/student-form.jsp")) adminSection = "students";
+       else if (adminRequestPath.endsWith("/teachers") || adminRequestPath.endsWith("/teachers.jsp") || adminRequestPath.endsWith("/teacher-form.jsp")) adminSection = "teachers";
+       else if (adminRequestPath.endsWith("/guardians") || adminRequestPath.endsWith("/guardians.jsp")) adminSection = "guardians";
+       else if (adminRequestPath.endsWith("/admissions") || adminRequestPath.endsWith("/admissions.jsp")) adminSection = "admissions";
+       else if (adminRequestPath.endsWith("/promotions") || adminRequestPath.endsWith("/promotions.jsp")) adminSection = "promotions";
+       else if (adminRequestPath.endsWith("/fees") || adminRequestPath.endsWith("/fees.jsp")) adminSection = "fees";
+       else if (adminRequestPath.endsWith("/audit") || adminRequestPath.endsWith("/audit.jsp")) adminSection = "audit";
+       else if (adminRequestPath.endsWith("/grade-scales") || adminRequestPath.endsWith("/grade-scales.jsp")) adminSection = "grades";
+       else if (adminRequestPath.endsWith("/classes") || adminRequestPath.endsWith("/classes.jsp") || adminRequestPath.endsWith("/class-form.jsp") || adminRequestPath.endsWith("/section-form.jsp")) adminSection = "classes";
+       else if (adminRequestPath.endsWith("/subjects") || adminRequestPath.endsWith("/subjects.jsp") || adminRequestPath.endsWith("/subject-form.jsp")) adminSection = "subjects";
+       else if (adminRequestPath.endsWith("/attendance") || adminRequestPath.endsWith("/attendance.jsp") || adminRequestPath.endsWith("/attendance-form.jsp")) adminSection = "attendance";
+       else if (adminRequestPath.endsWith("/examinations") || adminRequestPath.endsWith("/examinations.jsp") || adminRequestPath.endsWith("/examination-form.jsp")) adminSection = "examinations";
+       else if (adminRequestPath.endsWith("/timetable") || adminRequestPath.endsWith("/timetable.jsp") || adminRequestPath.endsWith("/timetable-form.jsp")) adminSection = "timetable";
+       else if (adminRequestPath.endsWith("/reports") || adminRequestPath.endsWith("/reports.jsp")) adminSection = "reports";
+       else if (adminRequestPath.endsWith("/settings") || adminRequestPath.endsWith("/settings.jsp")) adminSection = "settings";
+       else if (adminRequestPath.endsWith("/dashboard") || adminRequestPath.endsWith("/dashboard.jsp")) adminSection = "dashboard";
+       else if (adminRequestPath.endsWith("/section.jsp")) adminSection = request.getParameter("section");
+       else adminSection = "";
+   }
+   String navBase = "block rounded-md px-3 py-2.5 ";
+   String navActive = "bg-indigo-700 font-semibold text-white";
+   String navIdle = "hover:bg-slate-800"; %>
+<aside class="bg-slate-900 text-slate-200 lg:fixed lg:inset-y-0 lg:z-30 lg:w-60 lg:overflow-y-auto">
+    <div class="flex h-16 items-center gap-3 border-b border-slate-700 px-5">
+        <% if (logoUrl != null && !logoUrl.isEmpty()) { %><img class="h-9 w-9 rounded-md object-contain bg-white" src="<%= HtmlUtil.escape(logoSrc) %>" alt="<%= HtmlUtil.escape(siteName) %> logo"><% } else { %><span class="flex h-9 w-9 items-center justify-center rounded-md bg-indigo-600 font-bold text-white"><%= HtmlUtil.escape(siteName.substring(0, 1).toUpperCase()) %></span><% } %>
+        <div><p class="font-bold text-white"><%= HtmlUtil.escape(siteName) %></p><p class="text-[11px] text-slate-400">Management System</p></div>
+    </div>
+    <nav class="grid grid-cols-2 gap-1 p-3 text-sm sm:grid-cols-3 lg:block lg:space-y-1" aria-label="Admin navigation">
+        <a href="<%= request.getContextPath() %>/admin/dashboard" aria-current="<%= "dashboard".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("dashboard".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-gauge-high mr-2 w-4 text-center"></i>Dashboard</a>
+        <a href="<%= request.getContextPath() %>/admin/students" aria-current="<%= "students".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("students".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-user-graduate mr-2 w-4 text-center"></i>Students</a>
+        <a href="<%= request.getContextPath() %>/admin/teachers" aria-current="<%= "teachers".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("teachers".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-chalkboard-user mr-2 w-4 text-center"></i>Teachers</a>
+        <a href="<%= request.getContextPath() %>/admin/guardians" aria-current="<%= "guardians".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("guardians".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-people-roof mr-2 w-4 text-center"></i>Guardians</a>
+        <a href="<%= request.getContextPath() %>/admin/admissions" aria-current="<%= "admissions".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("admissions".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-user-plus mr-2 w-4 text-center"></i>Admissions</a>
+        <a href="<%= request.getContextPath() %>/admin/promotions" aria-current="<%= "promotions".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("promotions".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-arrow-up-right-dots mr-2 w-4 text-center"></i>Year rollover</a>
+        <a href="<%= request.getContextPath() %>/admin/fees" aria-current="<%= "fees".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("fees".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-receipt mr-2 w-4 text-center"></i>Fees</a>
+        <a href="<%= request.getContextPath() %>/admin/audit" aria-current="<%= "audit".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("audit".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-list-check mr-2 w-4 text-center"></i>Audit</a>
+        <a href="<%= request.getContextPath() %>/admin/grade-scales" aria-current="<%= "grades".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("grades".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-graduation-cap mr-2 w-4 text-center"></i>Grade scales</a>
+        <a href="<%= request.getContextPath() %>/admin/classes" class="<%= navBase + ("classes".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-school mr-2 w-4 text-center"></i>Classes &amp; sections</a>
+        <a href="<%= request.getContextPath() %>/admin/subjects" class="<%= navBase + ("subjects".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-book-open mr-2 w-4 text-center"></i>Subjects</a>
+        <a href="<%= request.getContextPath() %>/admin/attendance" aria-current="<%= "attendance".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("attendance".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-calendar-check mr-2 w-4 text-center"></i>Attendance</a>
+        <a href="<%= request.getContextPath() %>/admin/examinations" aria-current="<%= "examinations".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("examinations".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-file-circle-check mr-2 w-4 text-center"></i>Examinations</a>
+        <a href="<%= request.getContextPath() %>/admin/timetable" aria-current="<%= "timetable".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("timetable".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-clock mr-2 w-4 text-center"></i>Timetable</a>
+        <a href="<%= request.getContextPath() %>/admin/reports" aria-current="<%= "reports".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("reports".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-chart-pie mr-2 w-4 text-center"></i>Reports</a>
+        <a href="<%= request.getContextPath() %>/admin/settings" aria-current="<%= "settings".equals(adminSection) ? "page" : "false" %>" class="<%= navBase + ("settings".equals(adminSection) ? navActive + " ring-1 ring-indigo-300" : navIdle) %>"><i class="fa-solid fa-gear mr-2 w-4 text-center"></i>Settings</a>
+    </nav>
+</aside>
+<span id="admin-branding" class="hidden" data-site-name="<%= HtmlUtil.escape(siteName) %>" data-favicon="<%= HtmlUtil.escape(faviconSrc) %>"></span>
+<script>(function(){const b=document.getElementById('admin-branding');if(!b)return;const site=b.dataset.siteName||'EduERP',icon=b.dataset.favicon;if(icon){let link=document.querySelector('link[rel~="icon"]');if(!link){link=document.createElement('link');link.rel='icon';document.head.appendChild(link);}link.href=icon;}const title=document.title.replace(/\s\|\s[^|]+$/,'');document.title=title+' | '+site;})();</script>

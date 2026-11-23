@@ -1,0 +1,16 @@
+<header class="sticky top-0 z-20 flex min-h-20 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-6 lg:px-8">
+    <div>
+        <p class="text-xs text-slate-400">Admin / <%= HtmlUtil.escape(pageTitle) %></p>
+        <h1 class="mt-1 text-xl font-bold text-slate-900"><%= HtmlUtil.escape(pageTitle) %></h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="hidden text-sm font-semibold text-slate-600 sm:inline"><%= HtmlUtil.escape(adminDisplayName) %></span>
+        <%@ include file="/WEB-INF/notifications-bell.jspf" %>
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-700"><%= HtmlUtil.escape(initial) %></span>
+        <form action="<%= request.getContextPath() %>/logout" method="post">
+            <button class="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50" type="submit" aria-label="Log out">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i><span class="hidden sm:inline">Logout</span>
+            </button>
+        </form>
+    </div>
+</header>

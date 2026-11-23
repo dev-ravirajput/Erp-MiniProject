@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    <display-name>ERP System</display-name>
+    <welcome-file-list><welcome-file>index.jsp</welcome-file></welcome-file-list>
+    <servlet><servlet-name>LoginServlet</servlet-name><servlet-class>com.erp.controller.LoginServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>LoginServlet</servlet-name><url-pattern>/login</url-pattern></servlet-mapping>
+    <servlet><servlet-name>LogoutServlet</servlet-name><servlet-class>com.erp.controller.LogoutServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>LogoutServlet</servlet-name><url-pattern>/logout</url-pattern></servlet-mapping>
+    <servlet><servlet-name>NotificationServlet</servlet-name><servlet-class>com.erp.controller.NotificationServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>NotificationServlet</servlet-name><url-pattern>/notifications</url-pattern></servlet-mapping>
+    <servlet><servlet-name>StudentServlet</servlet-name><servlet-class>com.erp.controller.StudentServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>StudentServlet</servlet-name><url-pattern>/admin/students</url-pattern></servlet-mapping>
+    <servlet><servlet-name>TeacherServlet</servlet-name><servlet-class>com.erp.controller.TeacherServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>TeacherServlet</servlet-name><url-pattern>/admin/teachers</url-pattern></servlet-mapping>
+    <servlet><servlet-name>ClassServlet</servlet-name><servlet-class>com.erp.controller.ClassServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ClassServlet</servlet-name><url-pattern>/admin/classes</url-pattern></servlet-mapping>
+    <servlet><servlet-name>SubjectServlet</servlet-name><servlet-class>com.erp.controller.SubjectServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>SubjectServlet</servlet-name><url-pattern>/admin/subjects</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AttendanceServlet</servlet-name><servlet-class>com.erp.controller.AttendanceServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AttendanceServlet</servlet-name><url-pattern>/admin/attendance</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AcademicScheduleServlet</servlet-name><servlet-class>com.erp.controller.AcademicScheduleServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AcademicScheduleServlet</servlet-name><url-pattern>/admin/examinations</url-pattern><url-pattern>/admin/timetable</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AdminDashboardServlet</servlet-name><servlet-class>com.erp.controller.AdminDashboardServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminDashboardServlet</servlet-name><url-pattern>/admin/dashboard</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AdminReportsServlet</servlet-name><servlet-class>com.erp.controller.AdminReportsServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminReportsServlet</servlet-name><url-pattern>/admin/reports</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AdminSettingsServlet</servlet-name><servlet-class>com.erp.controller.AdminSettingsServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminSettingsServlet</servlet-name><url-pattern>/admin/settings</url-pattern></servlet-mapping>
+    <servlet><servlet-name>GuardianServlet</servlet-name><servlet-class>com.erp.controller.GuardianServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>GuardianServlet</servlet-name><url-pattern>/admin/guardians</url-pattern></servlet-mapping>
+    <servlet><servlet-name>FeeServlet</servlet-name><servlet-class>com.erp.controller.FeeServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>FeeServlet</servlet-name><url-pattern>/admin/fees</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AdmissionServlet</servlet-name><servlet-class>com.erp.controller.AdmissionServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdmissionServlet</servlet-name><url-pattern>/admin/admissions</url-pattern></servlet-mapping>
+    <servlet><servlet-name>PromotionServlet</servlet-name><servlet-class>com.erp.controller.PromotionServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>PromotionServlet</servlet-name><url-pattern>/admin/promotions</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AdminAuditServlet</servlet-name><servlet-class>com.erp.controller.AdminAuditServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminAuditServlet</servlet-name><url-pattern>/admin/audit</url-pattern></servlet-mapping>
+    <servlet><servlet-name>GradeScaleServlet</servlet-name><servlet-class>com.erp.controller.GradeScaleServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>GradeScaleServlet</servlet-name><url-pattern>/admin/grade-scales</url-pattern></servlet-mapping>
+    <servlet><servlet-name>BrandingAssetServlet</servlet-name><servlet-class>com.erp.controller.BrandingAssetServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>BrandingAssetServlet</servlet-name><url-pattern>/uploads/branding/*</url-pattern></servlet-mapping>
+    <servlet><servlet-name>AssignmentFileServlet</servlet-name><servlet-class>com.erp.controller.AssignmentFileServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AssignmentFileServlet</servlet-name><url-pattern>/assignment-files/*</url-pattern></servlet-mapping>
+    <servlet><servlet-name>StudentPortalServlet</servlet-name><servlet-class>com.erp.controller.StudentPortalServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>StudentPortalServlet</servlet-name><url-pattern>/student/dashboard</url-pattern><url-pattern>/student/profile</url-pattern><url-pattern>/student/attendance</url-pattern><url-pattern>/student/assignments</url-pattern><url-pattern>/student/marks</url-pattern><url-pattern>/student/result</url-pattern><url-pattern>/student/fees</url-pattern></servlet-mapping>
+    <servlet><servlet-name>TeacherPortalServlet</servlet-name><servlet-class>com.erp.controller.TeacherPortalServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>TeacherPortalServlet</servlet-name><url-pattern>/teacher/dashboard</url-pattern><url-pattern>/teacher/profile</url-pattern><url-pattern>/teacher/students</url-pattern><url-pattern>/teacher/classes</url-pattern><url-pattern>/teacher/attendance</url-pattern><url-pattern>/teacher/assignments</url-pattern><url-pattern>/teacher/marks</url-pattern></servlet-mapping>
+    <servlet><servlet-name>ParentPortalServlet</servlet-name><servlet-class>com.erp.controller.ParentPortalServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ParentPortalServlet</servlet-name><url-pattern>/parent/dashboard</url-pattern></servlet-mapping>
+</web-app>

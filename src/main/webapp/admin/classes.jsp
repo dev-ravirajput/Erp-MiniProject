@@ -1,0 +1,34 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List,java.util.Map,com.erp.util.HtmlUtil,com.erp.model.User" %>
+<%
+    User sessionUser = (User) session.getAttribute("user");
+    String adminDisplayName = sessionUser != null && sessionUser.getName() != null ? sessionUser.getName() : "Administrator";
+    String initial = adminDisplayName.isEmpty() ? "A" : adminDisplayName.substring(0, 1).toUpperCase();
+    String pageTitle = "Classes & Sections";
+    List<Map<String, Object>> classes = (List<Map<String, Object>>) request.getAttribute("classes");
+    String notice = (String) request.getAttribute("notice");
+    String noticeText = "";
+    if ("class-created".equals(notice)) noticeText = "Class created.";
+    else if ("class-updated".equals(notice)) noticeText = "Class updated.";
+    else if ("class-status-updated".equals(notice)) noticeText = "Class status updated.";
+    else if ("section-created".equals(notice)) noticeText = "Section created.";
+    else if ("section-updated".equals(notice)) noticeText = "Section updated.";
+    else if ("section-deleted".equals(notice)) noticeText = "Section deleted.";
+    else if ("duplicate".equals(notice)) noticeText = "That name already exists or the record is still referenced.";
+    else if ("error".equals(notice)) noticeText = "The change could not be completed.";
+    int sectionCount = 0;
+    if (classes != null) for (Map<String, Object> record : classes) sectionCount += ((List<?>) record.get("sections")).size();
+%>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Classes &amp; Sections | EduERP</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></head>
+<body class="bg-slate-100 font-sans text-slate-800"><div class="min-h-screen lg:flex"><%@ include file="admin-nav.jspf" %><main class="min-w-0 flex-1 lg:ml-60"><%@ include file="admin-header.jspf" %>
+    <section class="space-y-5 p-4 sm:p-6 lg:p-8">
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h2 class="text-2xl font-bold text-slate-900">Academic classes</h2><p class="mt-1 text-sm text-slate-500">Create classes for an academic year, then add and manage their sections.</p></div><a href="<%= request.getContextPath() %>/admin/classes?action=create-class" class="inline-flex items-center justify-center gap-2 rounded-md bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-800"><i class="fa-solid fa-plus"></i> Add class</a></div>
+        <% if (!noticeText.isEmpty()) { %><div class="border-l-4 <%= "error".equals(notice) || "duplicate".equals(notice) ? "border-rose-500 bg-rose-50 text-rose-800" : "border-emerald-500 bg-emerald-50 text-emerald-800" %> px-4 py-3 text-sm" role="status"><%= HtmlUtil.escape(noticeText) %></div><% } %>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2"><div class="border border-slate-200 bg-white p-5 shadow-sm"><p class="text-sm text-slate-500">Classes</p><p class="mt-1 text-2xl font-bold text-slate-900"><%= classes == null ? 0 : classes.size() %></p></div><div class="border border-slate-200 bg-white p-5 shadow-sm"><p class="text-sm text-slate-500">Sections</p><p class="mt-1 text-2xl font-bold text-slate-900"><%= sectionCount %></p></div></div>
+        <% if (classes == null || classes.isEmpty()) { %><div class="border border-slate-200 bg-white px-5 py-12 text-center text-slate-500"><i class="fa-solid fa-school mb-3 block text-2xl text-slate-300"></i>No classes have been created yet.</div><% } else { for (Map<String, Object> classRecord : classes) { boolean active = ((Number) classRecord.get("status")).intValue() != 0; List<Map<String, Object>> sections = (List<Map<String, Object>>) classRecord.get("sections"); %>
+        <article class="overflow-hidden border border-slate-200 bg-white shadow-sm"><div class="flex flex-col gap-4 border-b border-slate-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><div><div class="flex flex-wrap items-center gap-2"><h3 class="text-lg font-bold text-slate-900"><%= HtmlUtil.escape(classRecord.get("class_name")) %></h3><span class="rounded-sm bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700"><%= HtmlUtil.escape(classRecord.get("academic_year")) %></span><span class="rounded-sm <%= active ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700" %> px-2 py-1 text-xs font-semibold"><%= active ? "Active" : "Inactive" %></span></div><p class="mt-1 text-sm text-slate-500"><%= sections.size() %> section<%= sections.size() == 1 ? "" : "s" %></p></div><div class="flex flex-wrap gap-2"><a href="<%= request.getContextPath() %>/admin/classes?action=edit-class&amp;id=<%= classRecord.get("id") %>" class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50"><i class="fa-solid fa-pen mr-1"></i>Edit class</a><form action="<%= request.getContextPath() %>/admin/classes" method="post"><input type="hidden" name="action" value="toggle-class"><input type="hidden" name="id" value="<%= classRecord.get("id") %>"><button class="rounded-md border border-amber-300 px-3 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-50" type="submit"><i class="fa-solid fa-power-off mr-1"></i><%= active ? "Deactivate" : "Activate" %></button></form><a href="<%= request.getContextPath() %>/admin/classes?action=create-section&amp;classId=<%= classRecord.get("id") %>" class="rounded-md bg-indigo-700 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-800"><i class="fa-solid fa-plus mr-1"></i>Add section</a></div></div>
+            <div class="divide-y divide-slate-100"><% if (sections.isEmpty()) { %><p class="px-5 py-4 text-sm text-slate-500">No sections in this class.</p><% } else { for (Map<String, Object> section : sections) { %><div class="flex items-center justify-between gap-3 px-5 py-3"><div><p class="font-medium text-slate-800">Section <%= HtmlUtil.escape(section.get("section_name")) %></p></div><div class="flex gap-2"><a href="<%= request.getContextPath() %>/admin/classes?action=edit-section&amp;id=<%= section.get("id") %>" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"><i class="fa-solid fa-pen mr-1"></i>Edit</a><form action="<%= request.getContextPath() %>/admin/classes" method="post" onsubmit="return confirm('Delete this section?');"><input type="hidden" name="action" value="delete-section"><input type="hidden" name="id" value="<%= section.get("id") %>"><button class="rounded-md border border-rose-300 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50" type="submit"><i class="fa-solid fa-trash mr-1"></i>Delete</button></form></div></div><% } } %></div>
+        </article>
+        <% } } %>
+    </section>
+</main></div></body></html>
